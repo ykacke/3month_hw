@@ -1,9 +1,14 @@
 import asyncio
 import random
-from aiogram import Bot, Dispatcher, Router
+from aiogram import Bot, types, Dispatcher, Router
 from aiogram.types import Message
 from aiogram.filters import Command
 from dotenv import dotenv_values
+
+from handlers.start import start_router
+from handlers.dialog import dialog_router
+from handlers.cafe import cafe_router
+
 
 token = dotenv_values('.env')['BOT-TOKEN']
 bot = Bot(token=token)
@@ -11,29 +16,18 @@ dp = Dispatcher()
 router = Router()
 dp.include_router(router)
 
-NAME = ("Адина", "Тилек", "Лира", "Кира", "Фатима")
-
-@router.message(Command("random_name"))
-async def random_name(message: Message):
-    random_choice = random.choice(NAME)
-    await message.answer(f"Случайное имя: {random_choice}")
-
-@router.message(Command("myinfo"))
-async def myinfo(message: Message):
-    user = message.from_user
-    user_info = (
-        f"Ваше ID: {user.id}\n"
-        f"Ваше имя: {user.first_name}\n"
-        f"Ваше имя пользователя: @{user.username if user.username else 'Нет'}"
+@dp.message(Command("img"))
+async def img_handler(message: types.Message):
+    photo = types.FSInputFile("img/koshechki.jpeg")
+    await message.answer_photo(
+        photo=photo,
+        caption="кот!"
     )
-    await message.answer(user_info)
-
-@router.message(Command("start"))
-async def start_handler(message: Message):
-    name = message.from_user.first_name
-    await message.answer(f"Привет! {name} приветствует assistant_bot!")
 
 async def main():
+    dp.include_router(start_router)
+    dp.include_router(dialog_router)
+    dp.include_router(cafe_router)
     # Запуск бота
     await dp.start_polling(bot)
 
