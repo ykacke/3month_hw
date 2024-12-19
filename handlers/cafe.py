@@ -12,8 +12,7 @@ async def cafe(message: Message):
     ckb = InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton(text="меню", callback_data="menu"),
-                InlineKeyboardButton(text='отзыв', callback_data="review"),
+                InlineKeyboardButton(text="меню", callback_data="menu")
             ]
         ]
     )

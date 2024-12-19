@@ -14,7 +14,7 @@ class Questions(StatesGroup):
     extra_comments = State()
 
 
-@questions_router.message(Questions.name)
+@questions_router.callback_query(F.data=='review')
 async def phone_number(message: types.Message, state: FSMContext):
     await message.answer("Как с вами можно связаться?")
     await state.set_state(Questions.phone_number)
