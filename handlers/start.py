@@ -17,9 +17,6 @@ async def start_handler(message: types.Message):
             [
                 types.InlineKeyboardButton(text="Наш сайт", url="https://geeks.kg"),
                 types.InlineKeyboardButton(text="Наш инстаграм", url="https://geeks.kg")
-            ],
-            [
-                types.InlineKeyboardButton(text="Оставить отзыв", callback_data="review"),
             ]
         ]
     )

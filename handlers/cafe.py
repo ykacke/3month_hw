@@ -11,7 +11,10 @@ async def cafe(message: Message):
 
     ckb = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="меню", callback_data="menu")]
+            [
+                InlineKeyboardButton(text="меню", callback_data="menu"),
+                InlineKeyboardButton(text='отзыв', callback_data="review"),
+            ]
         ]
     )
     await message.answer(f"Привет, {name}! Добро пожаловать в кафе.", reply_markup=ckb)
