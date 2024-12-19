@@ -43,3 +43,10 @@ async def about_us(callback: types.CallbackQuery):
 async def donation_handler(callback: types.CallbackQuery):
     await callback.answer()
     await callback.message.answer("Текст для сообщения о пожервовании")
+
+
+
+@start_router.callback_query(F.data == "review")
+async def donation_handler(callback: types.CallbackQuery):
+    await callback.answer()
+    await callback.message.answer("Текст для отзыва")
