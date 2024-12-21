@@ -1,6 +1,7 @@
 from aiogram import Router, F, types
 from aiogram.filters import Command
 
+
 start_router = Router()
 
 
@@ -46,7 +47,7 @@ async def donation_handler(callback: types.CallbackQuery):
 
 
 
-@start_router.callback_query(F.data == "review")
-async def donation_handler(callback: types.CallbackQuery):
-    await callback.answer()
-    await callback.message.answer("Текст для отзыва")
+# @start_router.callback_query(F.data == "review")
+# async def donation_handler(callback: types.CallbackQuery):
+#     await callback.answer()
+#     await callback.message.answer("Текст для отзыва")
