@@ -3,8 +3,12 @@ from aiogram.filters import Command
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+import sqlite3
 
+review_button = Router()
 questions_router = Router()
+
+user = []
 
 class Questions(StatesGroup):
     phone_number = State()
@@ -23,10 +27,19 @@ def get_rating_keyboard():
         ]
     ])
 
-@questions_router.callback_query(F.data == 'review')
-async def phone_number(callback_query: types.CallbackQuery, state: FSMContext):
-    await callback_query.message.answer("Как с вами можно связаться? (Напишите свои контактные данные)")
-    await state.set_state(Questions.phone_number)
+# @questions_router.callback_query(F.data == 'review')
+# async def phone_number(callback_query: types.CallbackQuery, state: FSMContext):
+#     await callback_query.message.answer("Как с вами можно связаться? (Напишите свои контактные данные)")
+#     await state.set_state(Questions.phone_number)
+
+@review_button.message(Command("stop"))
+@review_button.message(F.text == "стоп")
+async def stop_reviews(message: types.Message, state: FSMContext):
+    await state.clear()
+    await message.answer("Диалог завершен.")
+@questions_router.message(Questions.name, default_state)
+async def ask_name(message: types.Message, state: FSMContext):
+    await message.answer("Как вас зовут?")
 
 @questions_router.message(Questions.phone_number)
 async def food_rating(message: types.Message, state: FSMContext):
@@ -47,6 +60,13 @@ async def extra_comments(callback_query: types.CallbackQuery, state: FSMContext)
     await state.update_data(cleanliness_rating=cleanliness_rating)
     await callback_query.message.answer("Дополнительные комментарии/жалобы? Напишите ваш отзыв.")
     await state.set_state(Questions.extra_comments)
+
+@questions_router.callback_query_handler(lambda c: c.data == "reviews")
+async def callback_query(callback_query: types.CallbackQuery, state: FSMContext):
+    user_id = callback_query.from_user.id
+    if user_id in user:
+        await callback_query.message.answer("Вы уже оставили комментарий/жалобу.")
+        return
 
 @questions_router.message(Questions.extra_comments)
 async def handle_extra_comments(message: types.Message, state: FSMContext):

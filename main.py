@@ -9,6 +9,7 @@ from handlers.start import start_router
 from handlers.dialog import dialog_router
 from handlers.cafe import cafe_router
 from handlers.reviews import questions_router
+from handlers.admin_module import admin_module
 
 
 token = dotenv_values('.env')['BOT-TOKEN']
@@ -30,6 +31,7 @@ async def main():
     dp.include_router(dialog_router)
     dp.include_router(cafe_router)
     dp.include_router(questions_router)
+    dp.include_router(admin_module)
     # Запуск бота
     await dp.start_polling(bot)
 
